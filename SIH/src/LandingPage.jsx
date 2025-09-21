@@ -7,6 +7,8 @@ const LandingPage = () => {
   const location = useLocation()
   const { t, currentLanguage, changeLanguage, languages } = useLanguage()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [hasRegistration, setHasRegistration] = useState(false)
+  const [userName, setUserName] = useState('')
   const dropdownRef = useRef(null)
 
   const handleLogoClick = () => {
@@ -26,6 +28,30 @@ const LandingPage = () => {
 
   const currentLang = languages.find(lang => lang.code === currentLanguage)
 
+  // Check for existing registration data
+  useEffect(() => {
+    const savedFormData = localStorage.getItem('touristFormData')
+    const savedDashboardState = localStorage.getItem('touristDashboardState')
+    
+    if (savedFormData && savedDashboardState === 'true') {
+      try {
+        const parsedData = JSON.parse(savedFormData)
+        // Check if we have valid form data
+        const hasValidData = parsedData.step1 && 
+          parsedData.step1.fullName && 
+          Object.keys(parsedData.step1).length > 0
+        
+        if (hasValidData) {
+          setHasRegistration(true)
+          setUserName(parsedData.step1.fullName)
+          console.log('Found existing registration for:', parsedData.step1.fullName)
+        }
+      } catch (error) {
+        console.error('Error parsing saved form data:', error)
+      }
+    }
+  }, [])
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -41,7 +67,7 @@ const LandingPage = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header Section */}
       <header className="relative py-6 px-6 bg-white/90 backdrop-blur-sm shadow-lg border-b border-slate-200 z-50">
         <div className="flex justify-between items-center max-w-7xl mx-auto">
@@ -124,29 +150,44 @@ const LandingPage = () => {
       </section>
 
       {/* Buttons Section */}
-      <section className="py-20 px-6 bg-gradient-to-b from-white to-slate-50">
+      <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
               {t('choosePortal')}
             </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               {t('accessServices')}
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className={`grid gap-8 ${hasRegistration ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-3'}`}>
+            {/* User Dashboard Button - Only show if registered */}
+            {hasRegistration && (
+              <button
+                onClick={() => handleButtonClick('/tourist/dashboard')}
+                className="group bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 p-8 text-center border-0 relative overflow-hidden"
+              >
+                <div className="relative z-10">
+                  <div className="text-6xl mb-4"></div>
+                  <span className="font-bold text-2xl md:text-3xl tracking-wide text-white">User Dashboard</span>
+                  <p className="text-green-100 text-sm mt-2">
+                    Welcome back, {userName}
+                  </p>
+                </div>
+              </button>
+            )}
+            
             {/* Tourist Button */}
             <button
-              onClick={() => handleButtonClick('/tourist')}
-              className="group aspect-square bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white cursor-pointer transition-all duration-500 flex flex-col items-center justify-center rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 hover:-translate-y-2 border-0 relative overflow-hidden"
+              onClick={() => handleButtonClick('/tourist/form')}
+              className="group bg-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 p-8 text-center border-0 relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="relative z-10">
-                <div className="text-6xl mb-4">🧳</div>
-                <span className="font-bold text-2xl md:text-3xl tracking-wide">{t('tourist')}</span>
-                <p className="text-blue-100 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {t('touristDesc')}
+                <div className="text-6xl mb-4"></div>
+                <span className="font-bold text-2xl md:text-3xl tracking-wide text-gray-800">{t('tourist')}</span>
+                <p className="text-gray-600 text-sm mt-2">
+                  Register for Tourist Digital ID
                 </p>
               </div>
             </button>
@@ -154,13 +195,12 @@ const LandingPage = () => {
             {/* Police Button */}
             <button
               onClick={() => handleButtonClick('/police')}
-              className="group aspect-square bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white cursor-pointer transition-all duration-500 flex flex-col items-center justify-center rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 hover:-translate-y-2 border-0 relative overflow-hidden"
+              className="group bg-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 p-8 text-center border-0 relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="relative z-10">
-                <div className="text-6xl mb-4">👮</div>
-                <span className="font-bold text-2xl md:text-3xl tracking-wide">{t('police')}</span>
-                <p className="text-red-100 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="text-6xl mb-4"></div>
+                <span className="font-bold text-2xl md:text-3xl tracking-wide text-gray-800">{t('police')}</span>
+                <p className="text-gray-600 text-sm mt-2">
                   {t('policeDesc')}
                 </p>
               </div>
@@ -169,13 +209,12 @@ const LandingPage = () => {
             {/* Tourism Dept Button */}
             <button
               onClick={() => handleButtonClick('/tourism-dept')}
-              className="group aspect-square bg-gradient-to-br from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white cursor-pointer transition-all duration-500 flex flex-col items-center justify-center rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 hover:-translate-y-2 border-0 relative overflow-hidden"
+              className="group bg-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 p-8 text-center border-0 relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="relative z-10">
-                <div className="text-6xl mb-4">🏛️</div>
-                <span className="font-bold text-2xl md:text-3xl tracking-wide">{t('tourismDept')}</span>
-                <p className="text-emerald-100 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="text-6xl mb-4"></div>
+                <span className="font-bold text-2xl md:text-3xl tracking-wide text-gray-800">{t('tourismDept')}</span>
+                <p className="text-gray-600 text-sm mt-2">
                   {t('tourismDeptDesc')}
                 </p>
               </div>
@@ -185,12 +224,12 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-800 text-white py-12 px-6">
+      <footer className="bg-white border-t border-gray-200 py-12 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-slate-300 text-lg">
+          <p className="text-gray-600 text-lg">
             {t('copyright')}
           </p>
-          <p className="text-slate-400 text-sm mt-2">
+          <p className="text-gray-500 text-sm mt-2">
             {t('footerSubtitle')}
           </p>
         </div>
