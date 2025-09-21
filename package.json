@@ -1,0 +1,32 @@
+{
+  "name": "ouorix-smart-tourist-safety",
+  "version": "1.0.0",
+  "description": "AI + Blockchain + Geo-fencing powered Smart Tourist Safety & Incident Response System",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "build": "npm run build:mobile && npm run build:dashboard",
+    "build:mobile": "cd mobile && npm run build",
+    "build:dashboard": "cd dashboard && npm run build",
+    "test": "npm run test:server && npm run test:mobile && npm run test:dashboard",
+    "test:server": "cd server && npm test",
+    "test:mobile": "cd mobile && npm test",
+    "test:dashboard": "cd dashboard && npm test",
+    "install:all": "npm install && cd server && npm install && cd ../mobile && npm install && cd ../dashboard && npm install"
+  },
+  "keywords": [
+    "ai",
+    "blockchain",
+    "geofencing",
+    "tourism",
+    "safety",
+    "incident-response",
+    "smart-city"
+  ],
+  "author": "Ouorix Team",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
