@@ -1,0 +1,246 @@
+.emergency-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.emergency-modal {
+  background: white;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+}
+
+.emergency-header {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 1rem 1rem 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.emergency-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.emergency-content {
+  padding: 2rem;
+}
+
+.emergency-info {
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.emergency-info p {
+  margin: 0.5rem 0;
+  color: #374151;
+}
+
+.sos-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sos-button {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.8rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 250px;
+}
+
+.sos-button:hover:not(.calling) {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+.sos-button.calling {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  cursor: not-allowed;
+  animation: pulse 1s infinite;
+}
+
+.emergency-types {
+  margin-bottom: 2rem;
+}
+
+.emergency-types h3 {
+  color: #374151;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.emergency-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.emergency-type-btn {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.8rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.emergency-type-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.emergency-type-btn.selected {
+  border-width: 3px;
+  background: #f8fafc;
+}
+
+.emergency-icon {
+  font-size: 1.5rem;
+}
+
+.emergency-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+  text-align: center;
+}
+
+.emergency-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.action-btn {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.action-btn:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.emergency-tips {
+  background: #f0f9ff;
+  border-left: 4px solid #0ea5e9;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.emergency-tips h4 {
+  color: #0c4a6e;
+  margin: 0 0 0.8rem 0;
+  font-size: 1rem;
+}
+
+.emergency-tips ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #075985;
+}
+
+.emergency-tips li {
+  margin-bottom: 0.3rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+  .emergency-modal {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .emergency-content {
+    padding: 1rem;
+  }
+  
+  .emergency-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .emergency-actions {
+    grid-template-columns: 1fr;
+  }
+  
+  .sos-button {
+    min-width: auto;
+    width: 100%;
+    padding: 1rem;
+  }
+}
