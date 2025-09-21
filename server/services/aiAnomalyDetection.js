@@ -1,4 +1,4 @@
-const tf = require('@tensorflow/tfjs-node');
+// const tf = require('@tensorflow/tfjs-node');
 const Tourist = require('../models/Tourist');
 const Incident = require('../models/Incident');
 const { calculateDistance, calculateBearing } = require('../utils/geoUtils');
@@ -18,25 +18,15 @@ class AIAnomalyDetection {
 
   async initialize() {
     try {
-      // In production, load a pre-trained model
-      // For demo, create a simple model structure
-      this.model = tf.sequential({
-        layers: [
-          tf.layers.dense({ inputShape: [10], units: 64, activation: 'relu' }),
-          tf.layers.dense({ units: 32, activation: 'relu' }),
-          tf.layers.dense({ units: 16, activation: 'relu' }),
-          tf.layers.dense({ units: 1, activation: 'sigmoid' })
-        ]
-      });
-
-      this.model.compile({
-        optimizer: 'adam',
-        loss: 'binaryCrossentropy',
-        metrics: ['accuracy']
-      });
+      // Mock model for demo (TensorFlow.js temporarily disabled)
+      this.model = {
+        predict: (input) => ({
+          data: () => Promise.resolve([Math.random() * 0.8 + 0.1]) // Random prediction between 0.1-0.9
+        })
+      };
 
       this.initialized = true;
-      console.log('AI Anomaly Detection service initialized');
+      console.log('AI Anomaly Detection service initialized (demo mode)');
     } catch (error) {
       console.error('Failed to initialize AI service:', error);
     }
@@ -290,7 +280,7 @@ class AIAnomalyDetection {
       // Use ML model for pattern recognition (simplified)
       const features = this.extractFeatures(tourist);
       if (features && this.model) {
-        const prediction = this.model.predict(tf.tensor2d([features]));
+        const prediction = this.model.predict([features]); // Mock input format
         const riskScore = await prediction.data();
         
         if (riskScore[0] > this.thresholds.distressPattern) {

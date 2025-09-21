@@ -1,12 +1,33 @@
 const express = require('express');
-const Web3 = require('web3');
+// const Web3 = require('web3');
 const Tourist = require('../models/Tourist');
 const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Mock Web3 for demo purposes
+const mockWeb3 = {
+  eth: {
+    accounts: {
+      create: () => ({
+        address: '0x' + Math.random().toString(16).slice(2, 42).padStart(40, '0'),
+        privateKey: '0x' + Math.random().toString(16).slice(2, 66).padStart(64, '0')
+      })
+    },
+    Contract: function(abi, address) {
+      return {
+        methods: {
+          storeData: () => ({ send: () => Promise.resolve({ transactionHash: generateTransactionHash() }) }),
+          getData: () => ({ call: () => Promise.resolve('mock_data') })
+        }
+      };
+    }
+  }
+};
+
 // Initialize Web3 (this would connect to actual blockchain in production)
-const web3 = new Web3(process.env.BLOCKCHAIN_RPC_URL || 'http://localhost:8545');
+// const web3 = new Web3(process.env.BLOCKCHAIN_RPC_URL || 'http://localhost:8545');
+const web3 = mockWeb3;
 
 // Smart contract ABI and address (simplified for demo)
 const contractABI = [
@@ -204,7 +225,7 @@ router.post('/emergency-protocol', authenticateToken, async (req, res) => {
     const { digitalId, emergencyType, location } = req.body;
     
     // Simulate smart contract call for emergency protocol
-    const contractInstance = new web3.eth.Contract(contractABI, CONTRACT_ADDRESS);
+    const contractInstance = web3.eth.Contract(contractABI, CONTRACT_ADDRESS);
     
     // Prepare emergency data
     const emergencyData = JSON.stringify({
